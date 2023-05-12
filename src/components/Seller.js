@@ -8,7 +8,7 @@ function SellersList() {
     const [sellers, setSellers] = useState([])
 
     function getData() {
-        fetch('http://localhost:8000/seller')
+        fetch('http://localhost:8080/sellers/read')
             .then((response) => response.json()
                 .then((data) => setSellers(data)))
     }
@@ -16,31 +16,34 @@ function SellersList() {
     useEffect(() => { getData() }, [])
 
     function sellerProperty(seller) {
-        const url = `/ManageSellerProperty/${seller.id}/${seller.firstName}/${seller.surname}`
+        const url = `/ManageSellerProperty/${seller.id}/${seller.firstName}/${seller.lastName}`
         navigate (url)
     }
 
     function removeRecord(recno) {
-        fetch(`http://localhost:8000/seller/${recno}`, { method: "DELETE" })
-            .then(response => {
-                if (response.ok) {
-                    let temprecords = records.filter(recs => recs.id !== recno);
-                    setRecords(temprecords);
+         
+        let temprecords = records.filter(recs => recs.id !== recno);
+        setRecords(temprecords);
 
-                } else {
+        fetch(`http://localhost:8080/sellers/delete/${recno}`, { method: "DELETE" })
+.then(response => {
+    if (response.ok){ response.json()
 
-                    console.error('Error deleting property:', response.status);
+    } else {
 
-                }
+        console.error('Error deleting seller:', response.status);
 
-            })
+    }
 
-            .catch(error => {
+}).then(data => getData())
 
-                console.error('Error deleting property:', error);
+.catch(error => {
 
-            });
-        }
+    console.error('Error deleting seller:', error);
+
+});
+
+}
 
     return (
 
@@ -55,9 +58,8 @@ function SellersList() {
                 <thead>
                     <tr>
                         <th>First Name</th>
-                        <th>Surname</th>
+                        <th>Last Name</th>
                         <th>Phone Number</th>
-                        <th>Email Address</th>
                         <th>Home Address</th>
                         <th>Postcode</th>
                     </tr>
@@ -66,9 +68,8 @@ function SellersList() {
                     {sellers.map(data =>
                         <tr>
                             <td>{data.firstName}</td>
-                            <td>{data.surname}</td>
+                            <td>{data.lastName}</td>
                             <td>{data.phone}</td> 
-                            <td>{data.email}</td>
                             <td>{data.address}</td>
                             <td>{data.postcode}</td>
                             <td><button className="btn btn-outline-dark btn-sm" onClick={()=> sellerProperty(data)}> Manage </button></td>

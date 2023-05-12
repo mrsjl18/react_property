@@ -10,7 +10,7 @@ function Property() {
     const [records, setRecords] = useState([])
 
     function getData() {
-        fetch('http://localhost:8000/property')
+        fetch('http://localhost:8080/properties/read')
             .then((response) => response.json()
                 .then((data) => setRecords(data)))
     }
@@ -29,8 +29,9 @@ function Property() {
                     <th> Postcode </th>
                     <th> Type </th>
                     <th> Price </th>
-                    <th> Bedroom </th>
-                    <th> Bathroom </th>
+                    <th> Bedrooms </th>
+                    <th> Bathrooms </th>
+                    <th> Garden </th>
                     <th> Status </th>
 
                 </tr>
@@ -40,8 +41,9 @@ function Property() {
                     <td> {rec.postcode} </td>
                     <td> {rec.type} </td>
                     <td> {rec.price} </td>
-                    <td> {rec.bedroom} </td>
-                    <td> {rec.bathroom} </td>
+                    <td> {rec.bedrooms} </td>
+                    <td> {rec.bathrooms} </td>
+                    <td> {rec.garden} </td>
                     <td> {rec.status} </td>
                 </tr>
                 )}

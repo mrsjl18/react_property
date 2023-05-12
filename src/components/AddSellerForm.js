@@ -6,13 +6,13 @@ import { useRef, useState } from 'react';
 
 export const AddSellerForm = () => {
     const firstNameRef = useRef();
-    const surnameRef = useRef();
+    const lastNameRef = useRef();
     const addressRef = useRef();
     const postcodeRef = useRef();
     const phoneRef = useRef();
 
     const [errorMessage_firstName, setErrorMessage_firstName] = useState('');
-    const [errorMessage_surname, setErrorMessage_surname] = useState('');
+    const [errorMessage_lastName, setErrorMessage_lastName] = useState('');
     const [errorMessage_phone, setErrorMessage_phone] = useState('');
     const [errorMessage_address, setErrorMessage_address] = useState('');
     const [errorMessage_postcode, setErrorMessage_postcode] = useState('');
@@ -22,7 +22,7 @@ export const AddSellerForm = () => {
     function validateAndSave() {
         const newSeller = {
             "firstName": firstNameRef.current.value,
-            "surname": surnameRef.current.value,
+            "lastName": lastNameRef.current.value,
             "address": addressRef.current.value,
             "postcode": postcodeRef.current.value,
             "phone": phoneRef.current.value,
@@ -31,8 +31,8 @@ export const AddSellerForm = () => {
             if (!newSeller.firstName) { setErrorMessage_firstName('Please fill in your first name'); }
             else { setErrorMessage_firstName('') }
 
-            if (!newSeller.surname) {setErrorMessage_surname('Please fill in your surname'); }
-            else {setErrorMessage_surname('') }
+            if (!newSeller.lastName) {setErrorMessage_lastName('Please fill in your last name'); }
+            else {setErrorMessage_lastName('') }
 
             if (!newSeller.phone) {setErrorMessage_phone('Please fill in your phone number'); }
             else {setErrorMessage_phone('') }
@@ -44,14 +44,14 @@ export const AddSellerForm = () => {
             else {setErrorMessage_postcode('') }
 
             if (newSeller.firstName &&
-                newSeller.surname &&
+                newSeller.lastName &&
                 newSeller.phone &&
                 newSeller.address &&
                 newSeller.postcode
 
 ) {
 
-    fetch("http://localhost:8000/seller", {
+    fetch("http://localhost:8080/sellers/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newSeller)
@@ -73,9 +73,9 @@ return (
         {errorMessage_firstName && <div className="form-group has-warning">{errorMessage_firstName}</div>}
         <br/> 
 
-        <label>Surname:</label>
-        <input ref={surnameRef} type='text' placeholder="Surname"/>
-         {errorMessage_surname && <div className="form-group has-warning">{errorMessage_surname}</div>}
+        <label>Last Name:</label>
+        <input ref={lastNameRef} type='text' placeholder="Last name"/>
+         {errorMessage_lastName && <div className="form-group has-warning">{errorMessage_lastName}</div>}
          <br />
 
          <label>Phone Number:</label>

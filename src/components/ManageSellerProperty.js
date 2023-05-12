@@ -6,24 +6,30 @@ function ManageSellerProperty() {
 
     const navigate = useNavigate()
 
-    const { sellerId, firstName, surname, id } = useParams()
+    const { sellerId, firstName, lastName } = useParams()
 
     const [records, setRecords] = useState([])
 
     function getData() {
-        fetch('http://localhost:8000/property')
-            .then((response) => response.json()
-                .then((data) => setRecords(data)))
+        fetch('http://localhost:8080/properties/read')
+            .then((response) => response.json())
+            .then((data) => {
+                setRecords(data)
+                console.log(data)
+            })
     }
 
     useEffect(() => { getData() }, [])
 
     function removeRecord(recno) {
-        fetch(`http://localhost:8000/property/${recno}`, { method: "DELETE" })
+
+        let temprecords = records.filter(recs => recs.id !== recno);
+        setRecords(temprecords);
+
+        fetch(`http://localhost:8080/properties/delete/${recno}`, { method: "DELETE" })
             .then(response => {
                 if (response.ok) {
-                    let temprecords = records.filter(recs => recs.id !== recno);
-                    setRecords(temprecords);
+                    response.json()
 
                 } else {
 
@@ -31,44 +37,45 @@ function ManageSellerProperty() {
 
                 }
 
-            })
+            }).then(data => getData())
 
             .catch(error => {
 
                 console.error('Error deleting property:', error);
 
             });
-        }
+
+    }
 
 
-        function withdrawProperty(recno) {
-            fetch(`http://localhost:8000/property/${recno}`, {
-                method: 'PATCH',
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ status: "Withdrawn" })
+    function withdrawProperty(recno) {
+        fetch(`http://localhost:8080/properties/withdraw/${recno}`, {
+            method: 'PATCH',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: "Withdrawn" })
+        })
+            .then((response) => {
+                navigate(`/ManageSellerProperty/${sellerId}/${firstName}/${lastName}`)
+                getData();
             })
-                .then((response) => {
-                    navigate(`/ManageSellerProperty/${sellerId}/${firstName}/${surname}`)
+            .catch(error => {
+                console.error('Error saving seller:', error);
+            });
+    }
+
+    function resubmitProperty(recno) {
+        fetch(`http://localhost:8080/properties/resubmit/${recno}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: "FOR SALE" })
+        })
+            .then((response) => {
+                if (response.ok) {
+
                     getData();
-                })
-                .catch(error => {
-                    console.error('Error saving seller:', error);
-                });
-        }
-
-        function resubmitProperty(recno) {
-            fetch(`http://localhost:8000/property/${recno}`, {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ status: "FOR SALE" }) 
+                }
             })
-                .then((response) => {
-                    if (response.ok) {
-
-                        getData(); 
-                    }
-                })
-                .catch((error) => console.error("Error:", error));
+            .catch((error) => console.error("Error:", error));
 
 
     }
@@ -78,10 +85,10 @@ function ManageSellerProperty() {
         navigate(url)
     }
 
-    const filteredRecord = records.filter(rec => rec.sellerId == sellerId)
+
     return (<>
 
-        <header>Manage Seller Property of : {firstName} {surname}</header><br />
+        <header>Manage Seller Property of : {firstName} {lastName}</header><br />
         <br />
         <button className="btn btn-outline-dark btn-sm" onClick={() => sellerProperty()}> Add Property</button>
 
@@ -93,21 +100,21 @@ function ManageSellerProperty() {
                 <td>Postcode</td>
                 <td>Type</td>
                 <td>Price</td>
-                <td>Bedroom</td>
-                <td>Bathroom</td>
+                <td>Bedrooms</td>
+                <td>Bathrooms</td>
                 <td>Garden</td>
                 <td>SellerId</td>
                 <td>Status</td>
                 <td>id</td>
             </tr>
-            {filteredRecord.map(data =>
+            {records.filter(rec => rec.seller !== null && parseInt(rec.seller.id) === parseInt(sellerId)).map(data =>
                 <tr>
                     <td>{data.address}</td>
                     <td>{data.postcode}</td>
                     <td>{data.type}</td>
                     <td>{data.price}</td>
-                    <td>{data.bedroom}</td>
-                    <td>{data.bathroom}</td>
+                    <td>{data.bedrooms}</td>
+                    <td>{data.bathrooms}</td>
                     <td>{data.garden}</td>
                     <td>{data.sellerId}</td>
                     <td>{data.status}</td>
@@ -121,6 +128,7 @@ function ManageSellerProperty() {
 
         </table>
     </>
-    )}
+    )
+}
 
 export default ManageSellerProperty;

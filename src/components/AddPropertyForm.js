@@ -13,8 +13,8 @@ export const SellerpropertyInputForm = () => {
      const postcodeRef = useRef();
      const typeRef = useRef();
      const priceRef = useRef();
-     const bedroomRef = useRef();
-     const bathroomRef = useRef();
+     const bedroomsRef = useRef();
+     const bathroomsRef = useRef();
      const gardenRef = useRef();
 
 
@@ -22,8 +22,8 @@ export const SellerpropertyInputForm = () => {
      let [errorMessage_postcode, setErrorMessage_postcode] = useState('');
      let [errorMessage_type, setErrorMessage_type] = useState('');
      let [errorMessage_price, setErrorMessage_price] = useState('');
-     let [errorMessage_bedroom, setErrorMessage_bedroom] = useState('');
-     let [errorMessage_bathroom, setErrorMessage_bathroom] = useState('');
+     let [errorMessage_bedrooms, setErrorMessage_bedrooms] = useState('');
+     let [errorMessage_bathrooms, setErrorMessage_bathrooms] = useState('');
      let [errorMessage_garden, setErrorMessage_garden] = useState('');
 
      const navigate = useNavigate()
@@ -36,8 +36,8 @@ export const SellerpropertyInputForm = () => {
                "postcode": postcodeRef.current.value,
                "type": typeRef.current.value,
                "price": priceRef.current.value,
-               "bedroom": bedroomRef.current.value,
-               "bathroom": bathroomRef.current.value,
+               "bedrooms": bedroomsRef.current.value,
+               "bathrooms": bathroomsRef.current.value,
                "garden": gardenRef.current.value,
                "sellerId": parseInt(sellerID), 
                "status": "FOR SALE"
@@ -56,11 +56,11 @@ export const SellerpropertyInputForm = () => {
           if (!newSeller.price) { setErrorMessage_price('Please fill in price.'); }
           else { setErrorMessage_price('') }
 
-          if (newSeller.bedroom === "select") { setErrorMessage_bedroom('Please select number of bedrooms.'); }
-          else { setErrorMessage_bedroom('') }
+          if (newSeller.bedrooms === "select") { setErrorMessage_bedrooms('Please select number of bedrooms.'); }
+          else { setErrorMessage_bedrooms('') }
 
-          if (newSeller.bathroom === "select") { setErrorMessage_bathroom('Please select number of bathrooms.'); }
-          else { setErrorMessage_bathroom('') }
+          if (newSeller.bathrooms === "select") { setErrorMessage_bathrooms('Please select number of bathrooms.'); }
+          else { setErrorMessage_bathrooms('') }
 
           if (newSeller.garden === "select") { setErrorMessage_garden('Please select whether you have a garden.'); }
           else { setErrorMessage_garden('') }
@@ -70,11 +70,11 @@ export const SellerpropertyInputForm = () => {
                newSeller.postcode &&
                newSeller.type &&
                newSeller.price &&
-               newSeller.bedroom &&
-               newSeller.bathroom &&
+               newSeller.bedrooms &&
+               newSeller.bathrooms &&
                newSeller.garden) {
 
-               fetch('http://localhost:8000/property', {
+               fetch('http://localhost:8080/properties/add', {
                     method: "POST",
                     headers: { "content-Type": "application/json" },
                     body: JSON.stringify(newSeller)
@@ -114,7 +114,7 @@ export const SellerpropertyInputForm = () => {
 
 
                     <label> Number of bedrooms: </label>
-                    <select ref={bedroomRef} type='text' placeholder='Bedroom'>
+                    <select ref={bedroomsRef} type='text' placeholder='Bedroom'>
                          <option value="select">Select</option>
                          <option>1</option>
                          <option>2</option>
@@ -122,12 +122,12 @@ export const SellerpropertyInputForm = () => {
                          <option>4</option>
                          <option>5</option>
                     </select>
-                    {errorMessage_bedroom && <div className="form-group has-warning">{errorMessage_bedroom}</div>}
+                    {errorMessage_bedrooms && <div className="form-group has-warning">{errorMessage_bedrooms}</div>}
                     <br />
 
 
                     <label> Number of bathrooms: </label>
-                    <select ref={bathroomRef} type='text' placeholder='Bathroom'>
+                    <select ref={bathroomsRef} type='text' placeholder='Bathroom'>
                          <option value="select">Select</option>
                          <option>1</option>
                          <option>2</option>
@@ -135,7 +135,7 @@ export const SellerpropertyInputForm = () => {
                          <option>4</option>
                          <option>5</option>
                     </select>
-                    {errorMessage_bathroom && <div className="form-group has-warning">{errorMessage_bathroom}</div>}
+                    {errorMessage_bathrooms && <div className="form-group has-warning">{errorMessage_bathrooms}</div>}
                     <br />
 
 

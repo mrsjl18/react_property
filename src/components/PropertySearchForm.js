@@ -10,13 +10,13 @@ function PropertySearch() {
     const [postcode, setpostcode] = useState('');
     const [type, settype] = useState('');
     const [price, setprice] = useState('');
-    const [bedroom, setbedroom] = useState('');
-    const [bathroom, setbathroom] = useState('');
+    const [bedrooms, setbedrooms] = useState('');
+    const [bathrooms, setbathrooms] = useState('');
     const [garden, setgarden] = useState('');
 
 
     function getData() {
-        fetch('http://localhost:8000/property')
+        fetch('http://localhost:8080/properties/read')
             .then((response) => response.json())
             .then((data) => {
                 setRecords(data);
@@ -26,10 +26,10 @@ function PropertySearch() {
     useEffect(() => { getData() }, [])
 
     function handleSearch() {
-        fetch('http://localhost:8000/property')
+        fetch('http://localhost:8080/properties/read')
             .then((response) => response.json())
             .then((data) => {
-                const filteredRecords = data.filter((rec) => rec.bedroom == bedroom && (rec.bathroom == bathroom == '')&& (rec.price == price || price ==''));
+                const filteredRecords = data.filter((rec) => rec.bedrooms == bedrooms && (rec.bathrooms == bathrooms == '')&& (rec.price == price || price ==''));
                 setRecords(filteredRecords);
             });
     }
@@ -55,12 +55,12 @@ function PropertySearch() {
             <br />
             <label>
                 Bedroom:
-                <input type="text" value={bedroom} onChange={(e) => setbedroom(e.target.value)} />
+                <input type="text" value={bedrooms} onChange={(e) => setbedrooms(e.target.value)} />
             </label>
             <br />
             <label>
                 Bathroom:
-                <input type="text" value={bathroom} onChange={(e) => setbathroom(e.target.value)} />
+                <input type="text" value={bathrooms} onChange={(e) => setbathrooms(e.target.value)} />
             </label>
             <br />
             <label>
@@ -77,8 +77,8 @@ function PropertySearch() {
                     <td>{rec.postcode}</td>
                     <td>{rec.type}</td>
                     <td>{rec.price}</td>
-                    <td>{rec.bedroom}</td>
-                    <td>{rec.bathroom}</td>
+                    <td>{rec.bedrooms}</td>
+                    <td>{rec.bathrooms}</td>
                     <td>{rec.status}</td>
                     <td>
                         {rec.status === "FOR SALE" && (

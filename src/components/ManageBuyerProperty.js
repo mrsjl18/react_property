@@ -6,12 +6,12 @@ function ManageBuyerProperty() {
 
     const navigate = useNavigate()
 
-    const { buyerId, firstName, surname } = useParams()
+    const { buyerId, firstName, lastName } = useParams()
 
     const [records, setRecords] = useState([])
 
     function getData() {
-        fetch('http://localhost:8000/property')
+        fetch('http://localhost:8080/properties/read')
             .then((response) => response.json()
                 .then((data) => setRecords(data)))
     }
@@ -19,7 +19,7 @@ function ManageBuyerProperty() {
     useEffect(() => { getData() }, [])
 
     function removeRecord(recno) {
-        fetch(`http://localhost:8000/property/${recno}`, { method: "DELETE" })
+        fetch(`http://localhost:8080/properties/delete/${recno}`, { method: "DELETE" })
             .then(response => {
                 if (response.ok) {
                     let temprecords = records.filter(recs => recs.id !== recno);
@@ -49,7 +49,7 @@ function ManageBuyerProperty() {
     const filteredRecord = records.filter(rec => rec.buyerId == buyerId)
     return (<>
 
-        <header>Manage Buyer Property of : {firstName} {surname}</header><br />
+        <header>Manage Buyer Property of : {firstName} {lastName}</header><br />
         <br />
         <button className="btn btn-outline-dark btn-sm" onClick={() => buyerProperty()}> Add Property</button>
 
@@ -61,8 +61,8 @@ function ManageBuyerProperty() {
                 <td>Postcode</td>
                 <td>Type</td>
                 <td>Price</td>
-                <td>Bedroom</td>
-                <td>Bathroom</td>
+                <td>Bedrooms</td>
+                <td>Bathrooms</td>
                 <td>Garden</td>
                 <td>SellerId</td>
                 <td>Status</td>
@@ -74,8 +74,8 @@ function ManageBuyerProperty() {
                     <td>{data.postcode}</td>
                     <td>{data.type}</td>
                     <td>{data.price}</td>
-                    <td>{data.bedroom}</td>
-                    <td>{data.bathroom}</td>
+                    <td>{data.bedrooms}</td>
+                    <td>{data.bathrooms}</td>
                     <td>{data.garden}</td>
                     <td>{data.sellerId}</td>
                     <td>{data.status}</td>

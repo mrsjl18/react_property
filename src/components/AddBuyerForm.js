@@ -5,33 +5,36 @@ import { useRef, useState } from 'react';
  
 export const AddBuyerForm = () => {
     const firstNameRef = useRef();
-    const surnameRef = useRef();
+    const lastNameRef = useRef();
     const addressRef = useRef();
     const postcodeRef = useRef();
     const phoneRef = useRef();
+    const budgetRef = useRef();
 
     const [errorMessage_firstName, setErrorMessage_firstName] = useState('');
-    const [errorMessage_surname, setErrorMessage_surname] = useState('');
+    const [errorMessage_lastName, setErrorMessage_lastName] = useState('');
     const [errorMessage_phone, setErrorMessage_phone] = useState('');
     const [errorMessage_address, setErrorMessage_address] = useState('');
     const [errorMessage_postcode, setErrorMessage_postcode] = useState('');
+    const [errorMessage_budget, setErrorMessage_budget] = useState('');
 
     const navigate = useNavigate()
 
     function validateAndSave() {
         const newBuyer = {
             "firstName": firstNameRef.current.value,
-            "surname": surnameRef.current.value,
+            "lastName": lastNameRef.current.value,
             "address": addressRef.current.value,
             "postcode": postcodeRef.current.value,
             "phone": phoneRef.current.value,
+            "budget": budgetRef.current.value,
         };
 
             if (!newBuyer.firstName) { setErrorMessage_firstName('Please fill in your first name'); }
             else { setErrorMessage_firstName('') }
 
-            if (!newBuyer.surname) {setErrorMessage_surname('Please fill in your surname'); }
-            else {setErrorMessage_surname('') }
+            if (!newBuyer.lastName) {setErrorMessage_lastName('Please fill in your last name'); }
+            else {setErrorMessage_lastName('') }
 
             if (!newBuyer.phone) {setErrorMessage_phone('Please fill in your phone number'); }
             else {setErrorMessage_phone('') }
@@ -42,15 +45,19 @@ export const AddBuyerForm = () => {
             if (!newBuyer.postcode) {setErrorMessage_postcode('Please fill in your postcode'); }
             else {setErrorMessage_postcode('') }
 
+            if (!newBuyer.budget) {setErrorMessage_budget('Please fill in your budget'); }
+            else {setErrorMessage_postcode('') }
+
             if (newBuyer.firstName &&
-                newBuyer.surname &&
+                newBuyer.lastName &&
                 newBuyer.phone &&
                 newBuyer.address &&
-                newBuyer.postcode
+                newBuyer.postcode &&
+                newBuyer.budget
 
 ) {
 
-    fetch("http://localhost:8000/buyer", {
+    fetch("http://localhost:8080/buyers/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newBuyer)
@@ -72,9 +79,9 @@ return (
         {errorMessage_firstName && <div className="form-group has-warning">{errorMessage_firstName}</div>}
         <br/> 
 
-        <label>Surname:</label>
-        <input ref={surnameRef} type='text' placeholder="Surname"/>
-         {errorMessage_surname && <div className="form-group has-warning">{errorMessage_surname}</div>}
+        <label>Last Name:</label>
+        <input ref={lastNameRef} type='text' placeholder="Last name"/>
+         {errorMessage_lastName && <div className="form-group has-warning">{errorMessage_lastName}</div>}
          <br />
 
          <label>Phone Number:</label>
@@ -91,6 +98,12 @@ return (
         <input ref={postcodeRef} type='text' placeholder="Postcode"/>
         {errorMessage_postcode && <div className="form-group has-warning">{errorMessage_postcode}</div>}
         <br />
+
+        <label>Budget:</label>
+        <input ref={budgetRef} type='text' placeholder="Budget"/>
+        {errorMessage_budget && <div className="form-group has-warning">{errorMessage_budget}</div>}
+        <br />
+
 
 
         <Link className="buyerBtn" onClick={() => validateAndSave()}> {' '}Save{' '} </Link>
