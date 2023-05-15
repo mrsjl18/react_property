@@ -39,7 +39,8 @@ export const SellerpropertyInputForm = () => {
                "bedrooms": bedroomsRef.current.value,
                "bathrooms": bathroomsRef.current.value,
                "garden": gardenRef.current.value,
-               "sellerId": parseInt(sellerID), 
+               "seller":{
+                    "id" : parseInt(sellerID)}, 
                "status": "FOR SALE"
                
           }
@@ -142,8 +143,8 @@ export const SellerpropertyInputForm = () => {
                     <label> Is there a garden: </label>
                     <select ref={gardenRef} type='text' placeholder='garden'>
                          <option value="select">Select</option>
-                         <option value="true">Yes</option>
-                         <option value="false">No</option>
+                         <option>1</option>
+                         <option>0</option>
                     </select>
                     {errorMessage_garden && <div className="form-group has-warning">{errorMessage_garden}</div>}
                     <br />

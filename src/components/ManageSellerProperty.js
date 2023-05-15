@@ -15,7 +15,6 @@ function ManageSellerProperty() {
             .then((response) => response.json())
             .then((data) => {
                 setRecords(data)
-                console.log(data)
             })
     }
 
@@ -49,10 +48,10 @@ function ManageSellerProperty() {
 
 
     function withdrawProperty(recno) {
-        fetch(`http://localhost:8080/properties/withdraw/${recno}`, {
+        fetch(`http://localhost:8080/properties/update/${recno}`, {
             method: 'PATCH',
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ status: "Withdrawn" })
+            body: JSON.stringify({ "status": "WITHDRAWN" })
         })
             .then((response) => {
                 navigate(`/ManageSellerProperty/${sellerId}/${firstName}/${lastName}`)
@@ -64,10 +63,10 @@ function ManageSellerProperty() {
     }
 
     function resubmitProperty(recno) {
-        fetch(`http://localhost:8080/properties/resubmit/${recno}`, {
+        fetch(`http://localhost:8080/properties/update/${recno}`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ status: "FOR SALE" })
+            body: JSON.stringify({ "status": "FOR SALE" })
         })
             .then((response) => {
                 if (response.ok) {
@@ -103,9 +102,9 @@ function ManageSellerProperty() {
                 <td>Bedrooms</td>
                 <td>Bathrooms</td>
                 <td>Garden</td>
-                <td>SellerId</td>
+                {/* <td>SellerId</td> */}
                 <td>Status</td>
-                <td>id</td>
+                <td>PropertyId</td>
             </tr>
             {records.filter(rec => rec.seller !== null && parseInt(rec.seller.id) === parseInt(sellerId)).map(data =>
                 <tr>
@@ -116,13 +115,13 @@ function ManageSellerProperty() {
                     <td>{data.bedrooms}</td>
                     <td>{data.bathrooms}</td>
                     <td>{data.garden}</td>
-                    <td>{data.sellerId}</td>
+                    {/* <td>{data.sellerId}</td> */}
                     <td>{data.status}</td>
-                    <td>{data.id}</td>
+                    <td>{data.property_id}</td>
 
-                    <td> <input className="btn btn-outline-dark btn-sm btn_delete" type="button" value="Delete Property" onClick={() => removeRecord(data.address)} /></td>
-                    <td> <input className="btn btn-outline-dark btn-sm" type="button" value="Withdraw Property" onClick={() => withdrawProperty(data.id)} /></td>
-                    <td> <input className="btn btn-outline-dark btn-sm" type="button" value="Resubmit Property" onClick={() => resubmitProperty(data.id)} /> </td>
+                    <td> <input className="btn btn-outline-dark btn-sm btn_delete" type="button" value="Delete Property" onClick={() => removeRecord(data.property_id)} /></td>
+                    <td> <input className="btn btn-outline-dark btn-sm" type="button" value="Withdraw Property" onClick={() => withdrawProperty(data.property_id)} /></td>
+                    <td> <input className="btn btn-outline-dark btn-sm" type="button" value="Resubmit Property" onClick={() => resubmitProperty(data.property_id)} /> </td>
                 </tr>
             )}
 
